@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Playfair_Display, Dancing_Script } from "next/font/google";
 import Link from "next/link";
-import { CldImage } from "next-cloudinary";
 import { supabase } from "../utils/supabase";
 
 const playfair = Playfair_Display({ subsets: ["latin"] });
