@@ -26,7 +26,7 @@ export default function WeddingInvitation() {
             </span>
             <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out mb-0"></span>
           </Link>
-          <Link href="/galeria" className="relative group">
+          <Link href="/galery" className="relative group">
             <span
               className={`${playfair.className} text-white font-semibold py-1 px-3 rounded-full transition-all duration-300 ease-in-out bg-[#8B6E4E] group-hover:bg-white group-hover:text-[#8B6E4E] text-sm`}
             >
