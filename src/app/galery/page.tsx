@@ -61,7 +61,7 @@ export default function Galery() {
         </h1>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {memories.map((memory: any) => (
+          {memories.map((memory: Memory) => (
             <div key={memory.id} className="bg-white rounded-lg shadow-md overflow-hidden transform transition-all duration-300 hover:scale-105">
               <button
                 onClick={() => setSelectedMemory(memory)}

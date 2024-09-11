@@ -1,6 +1,5 @@
 import { UploadApiResponse } from "cloudinary";
 import { v2 as cloudinary } from "cloudinary";
-import type { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 
 cloudinary.config({
