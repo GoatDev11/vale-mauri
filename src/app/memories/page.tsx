@@ -5,7 +5,7 @@ import { Playfair_Display, Dancing_Script } from "next/font/google";
 import Link from "next/link";
 import { supabase } from "../utils/supabase";
 import UploadMemory from "../ui/upload-memory";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const playfair = Playfair_Display({ subsets: ["latin"] });
 const dancingScript = Dancing_Script({ subsets: ["latin"] });
