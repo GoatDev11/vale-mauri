@@ -45,8 +45,6 @@ export default function WeddingInvitation() {
         />
         <div className="relative z-10 flex items-center justify-center p-4 h-full">
           <div className="max-w-2xl w-full h-full p-4 sm:p-8 relative">
-            <div className="absolute top-0 left-0 w-16 sm:w-24 h-16 sm:h-24 bg-[url('/placeholder.svg?height=100&width=100')] opacity-20 transform -rotate-90"></div>
-            <div className="absolute bottom-0 right-0 w-16 sm:w-24 h-16 sm:h-24 bg-[url('/placeholder.svg?height=100&width=100')] opacity-20"></div>
 
             <div
               className={`text-center mb-6 sm:mb-8 transition-opacity duration-1000 ease-in-out ${

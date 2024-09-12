@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Playfair_Display, Dancing_Script } from "next/font/google";
 import Link from "next/link";
 import { supabase } from "../utils/supabase";
+import UploadMemory from "../ui/upload-memory";
+import { redirect, useRouter } from "next/navigation";
 
 const playfair = Playfair_Display({ subsets: ["latin"] });
 const dancingScript = Dancing_Script({ subsets: ["latin"] });
@@ -13,6 +15,9 @@ export default function Memories() {
   const [message, setMessage] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [image, setImage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -23,6 +28,7 @@ export default function Memories() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true);
 
     const formData = new FormData();
     if (file) {
@@ -48,12 +54,17 @@ export default function Memories() {
         });
         if (error) {
           console.error("Error al guardar en Supabase:", error);
+          setIsLoading(false);
         } else {
           setName("");
           setMessage("");
           setFile(null);
           setImage(null);
-          alert("¡Recuerdo subido con éxito!");
+
+          setTimeout(() => {
+            setIsLoading(false); // Desactivar el loader después de 3 segundos
+          }, 5000); 
+          router.push("/memorie-success"); // Redirigir a la página de confirmación
         }
       } catch (error) {
         console.error("Error al guardar en Supabase:", error);
@@ -61,6 +72,8 @@ export default function Memories() {
       }
     } catch (error) {
       console.error("Error en la solicitud a Cloudinary:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -78,6 +91,11 @@ export default function Memories() {
         </div>
       </nav>
 
+      {
+        isLoading &&
+        <UploadMemory isVisible={isLoading} />
+      }
+
       <div className="flex-grow flex items-center justify-center p-4">
         <div className="w-full max-w-2xl p-4 sm:p-8 bg-white rounded-lg shadow-lg">
           <h1
@@ -89,15 +107,13 @@ export default function Memories() {
           <p
             className={`${playfair.className} text-[#8B6E4E] text-center mb-6 sm:mb-8 text-sm sm:text-base`}
           >
-            Queridos amigos y familiares,
+            Queridos amigos y familiares.
             <br />
             Nos encantaría que compartieran sus momentos favoritos de nuestra
             boda.
             <br />
             Cada foto y video que suban se convertirá en un tesoro para
-            nosotros,
-            <br />
-            ayudándonos a revivir este día tan especial una y otra vez.
+            nosotros, ayudándonos a revivir este día tan especial una y otra vez.
             <br />
             ¡Gracias por ser parte de nuestra historia de amor!
           </p>
@@ -118,7 +134,7 @@ export default function Memories() {
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-3 py-2 border border-[#C1976F] rounded-md focus:outline-none focus:ring-2 focus:ring-[#8B6E4E] text-sm sm:text-base"
+                className="w-full px-3 py-2 border border-[#C1976F] rounded-md focus:outline-none focus:ring-2 focus:ring-[#8B6E4E] text-sm text-[#C1976F] sm:text-base"
                 placeholder="Escribe tu nombre aquí"
               />
             </div>
@@ -134,7 +150,7 @@ export default function Memories() {
                 id="message"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="w-full px-3 py-2 border border-[#C1976F] rounded-md focus:outline-none focus:ring-2 focus:ring-[#8B6E4E] h-24 sm:h-32 text-sm sm:text-base"
+                className="w-full px-3 py-2 border border-[#C1976F] rounded-md focus:outline-none focus:ring-2 focus:ring-[#8B6E4E] h-24 sm:h-32 text-sm text-[#C1976F] sm:text-base"
                 placeholder="Comparte tus deseos y recuerdos favoritos de la boda"
               />
             </div>
