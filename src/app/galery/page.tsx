@@ -5,6 +5,13 @@ import { Playfair_Display, Dancing_Script } from "next/font/google";
 import Link from "next/link";
 import { X } from "lucide-react";
 import { supabase } from "../utils/supabase";
+import { Card, CardFooter } from "@nextui-org/card";
+import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/pagination";
 
 const playfair = Playfair_Display({ subsets: ["latin"] });
 const dancingScript = Dancing_Script({ subsets: ["latin"] });
@@ -60,8 +67,8 @@ export default function Galery() {
           Galería de Recuerdos
         </h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {memories.map((memory: Memory) => (
+        <div className="hidden sm:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {/* {memories.map((memory: Memory) => (
             <div
               key={memory.id}
               className="bg-white rounded-lg shadow-md overflow-hidden transform transition-all duration-300 hover:scale-105 border-2 border-[#C1976F]"
@@ -85,6 +92,67 @@ export default function Galery() {
               </div>
             </div>
           ))}
+ */}
+          {memories.map((memory: Memory) => (
+            <Card
+              key={memory.id}
+              isFooterBlurred
+              radius="lg"
+              className="cursor-pointer border-2 border-[#C1976F] relative h-[300px] w-[300px] overflow-hidden"
+            >
+              <div className="relative h-full w-full" onClick={() => setSelectedMemory(memory)}>
+                <Image
+                  alt={`Foto de ${memory.name}`}
+                  className="h-full w-full object-cover; transition-all duration-300 hover:opacity-80 group-hover:scale-110"
+                  src={memory.image_url}
+                  width={300}
+                  height={300}
+                  priority={true}
+                />
+              </div>
+              <CardFooter className="before:bg-white/10 border-white/20 border-1 border-[#C1976F] overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+                <p
+                  className={`${playfair.className} text-white text-center font-semibold truncate`}
+                >
+                  {memory.name}
+                </p>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+
+        <div className="block sm:hidden">
+          <Swiper
+            spaceBetween={10}
+            slidesPerView={1}
+            loop={true}
+            modules={[Pagination]}
+          >
+            {memories.map((memory: Memory) => (
+              <SwiperSlide key={memory.id} onClick={() => setSelectedMemory(memory)}>
+                <Card
+                  isFooterBlurred
+                  className="relative w-full h-80 isFooterBlurred border-2 border-[#C1976F]"
+                  radius="lg"
+                >
+                  <Image
+                    src={memory.image_url}
+                    alt={`Foto de ${memory.name}`}
+                    className="object-cover w-full h-full"
+                    width={300}
+                    height={300}
+                  />
+                  <CardFooter className="before:bg-white/10 border-white/20 border-1 border-[#C1976F] overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+                    <p
+                      className={`${playfair.className} text-white text-center font-semibold truncate`}
+                    >
+                      {memory.name}
+                    </p>
+                  </CardFooter>
+                </Card>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
       </main>
 
@@ -98,7 +166,7 @@ export default function Galery() {
             >
               <X size={24} />
             </button>
-            <div className="relative h-64 sm:h-96 bg-[#f9f5f2]">
+            <div className="relative h-80 sm:h-96 bg-[#f9f5f2]">
               <img
                 src={selectedMemory.image_url}
                 alt={`Foto de ${selectedMemory.name}`}

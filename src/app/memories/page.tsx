@@ -6,6 +6,8 @@ import Link from "next/link";
 import { supabase } from "../utils/supabase";
 import UploadMemory from "../ui/upload-memory";
 import { useRouter } from "next/navigation";
+import { Trash } from "lucide-react";
+import Image from "next/image";
 
 const playfair = Playfair_Display({ subsets: ["latin"] });
 const dancingScript = Dancing_Script({ subsets: ["latin"] });
@@ -16,7 +18,6 @@ export default function Memories() {
   const [file, setFile] = useState<File | null>(null);
   const [image, setImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
   const router = useRouter();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,8 +27,14 @@ export default function Memories() {
     }
   };
 
+  const handleDeleteImage = () => {
+    setFile(null);
+    setImage(null);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     setIsLoading(true);
 
     const formData = new FormData();
@@ -63,7 +70,7 @@ export default function Memories() {
 
           setTimeout(() => {
             setIsLoading(false); // Desactivar el loader después de 3 segundos
-          }, 5000); 
+          }, 5000);
           router.push("/memorie-success"); // Redirigir a la página de confirmación
         }
       } catch (error) {
@@ -91,10 +98,7 @@ export default function Memories() {
         </div>
       </nav>
 
-      {
-        isLoading &&
-        <UploadMemory isVisible={isLoading} />
-      }
+      {isLoading && <UploadMemory isVisible={isLoading} />}
 
       <div className="flex-grow flex items-center justify-center p-4">
         <div className="w-full max-w-2xl p-4 sm:p-8 bg-white rounded-lg shadow-lg">
@@ -113,7 +117,8 @@ export default function Memories() {
             boda.
             <br />
             Cada foto y video que suban se convertirá en un tesoro para
-            nosotros, ayudándonos a revivir este día tan especial una y otra vez.
+            nosotros, ayudándonos a revivir este día tan especial una y otra
+            vez.
             <br />
             ¡Gracias por ser parte de nuestra historia de amor!
           </p>
@@ -136,6 +141,7 @@ export default function Memories() {
                 onChange={(e) => setName(e.target.value)}
                 className="w-full px-3 py-2 border border-[#C1976F] rounded-md focus:outline-none focus:ring-2 focus:ring-[#8B6E4E] text-sm text-[#C1976F] sm:text-base"
                 placeholder="Escribe tu nombre aquí"
+                required
               />
             </div>
 
@@ -152,6 +158,7 @@ export default function Memories() {
                 onChange={(e) => setMessage(e.target.value)}
                 className="w-full px-3 py-2 border border-[#C1976F] rounded-md focus:outline-none focus:ring-2 focus:ring-[#8B6E4E] h-24 sm:h-32 text-sm text-[#C1976F] sm:text-base"
                 placeholder="Comparte tus deseos y recuerdos favoritos de la boda"
+                required
               />
             </div>
 
@@ -171,6 +178,7 @@ export default function Memories() {
                       className="hidden"
                       accept="image/*,video/*"
                       onChange={handleFileChange}
+                      required
                       /* onChange={handleFileChange} */
                     />
                     <label
@@ -199,13 +207,20 @@ export default function Memories() {
             )}
 
             {image && ( // Muestra la previsualización si hay una URL
-              <div className="mt-4">
-                <img
+              <div className="inline-block relative sm:w-auto">
+                <Image
                   src={image}
                   alt="Previsualización de la imagen"
+                  className="max-h-96 w-full"
                   width={200} // Ajusta el ancho según sea necesario
                   height={200} // Ajusta la altura según sea necesario
                 />
+                <div
+                  onClick={handleDeleteImage}
+                  className="cursor-pointer absolute bottom-2 right-2 bg-[#E8D9CA] text-white p-1 rounded-full hover:bg-[#8B6E4E]"
+                >
+                  <Trash color="#C1976F" className="w-4 h-5" strokeWidth={3} />
+                </div>
               </div>
             )}
 
